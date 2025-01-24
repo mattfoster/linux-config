@@ -1,0 +1,8 @@
+[Unit]
+Description=Run Restic hourly
+
+[Timer]
+OnCalendar=hourly
+
+[Install]
+WantedBy=timers.target

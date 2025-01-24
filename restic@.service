@@ -1,0 +1,17 @@
+[Unit]
+Description=Restic backup on %I
+After=network-online.target
+
+OnFailure=healthcheck@<healthcheck-token>:failure.service
+OnSuccess=healthcheck@<healthcheck-token>:success.service
+Wants=healthcheck@<healthcheck-token>:start.service
+
+[Service]
+Type=oneshot
+User=restic
+# runs restic backup on the files listed in /etc/restic/your-repo.files
+ExecStart=restic backup --files-from /etc/restic/%I.files --repository-file=%d/restic-repo --password-file=%d/restic-password
+AmbientCapabilities=CAP_DAC_READ_SEARCH
+
+[Install]
+WantedBy=multi-user.target
